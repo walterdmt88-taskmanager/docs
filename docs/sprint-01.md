@@ -24,8 +24,8 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 
 **Acceptance criteria (from DOP AC-01):**
 - `POST /users` with valid email + password → 201 with `{ id, email, created_at }`
-- Duplicate email → 409 `{ message: "email already in use" }`
-- Missing field → 400
+- Duplicate email → 409 `{ "error": "Email already in use" }`
+- Missing field → 400 `{ "error": "<specific message>" }`
 
 | # | Task | Owner | Est. |
 |---|---|---|---|
@@ -43,7 +43,7 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 
 **Acceptance criteria (from DOP AC-02):**
 - `POST /auth/login` with correct credentials → 200 with `{ token, user }`
-- Wrong password → 401 `{ message: "invalid email or password" }`
+- Wrong password → 401 `{ "error": "Invalid credentials" }`
 - JWT payload includes `userId` and `role`, expires in 24h
 
 | # | Task | Owner | Est. |
@@ -99,14 +99,15 @@ Covers AC-03, AC-04, AC-06 from DOP-001. All task data lives here.
 **I want to** list my assigned tasks,  
 **so that** I can see everything I am responsible for.
 
-**Acceptance criteria (from DOP AC-06):**
-- `GET /tasks?assignee=me` → 200 with array of tasks ordered by `created_at` desc
-- Empty result → 200 with `{ tasks: [], total: 0 }`
+**Acceptance criteria (from DOP AC-05):**
+- `GET /tasks?assignee_id=<uuid>` → 200 with array of tasks matching that assignee
+- `GET /tasks?status=TODO` → 200 with array filtered by status
+- Empty result → 200 with `[]`
 
 | # | Task | Owner | Est. |
 |---|---|---|---|
-| T-13 | `GET /tasks` endpoint with `?assignee=me` filter | B | 2h |
-| T-14 | Integration test: list tasks, empty result | A | 1h |
+| T-13 | `GET /tasks` endpoint with `?status=` and `?assignee_id=` query filters | B | 2h |
+| T-14 | Integration test: list tasks by assignee_id, list by status, empty result | A | 1h |
 
 ---
 

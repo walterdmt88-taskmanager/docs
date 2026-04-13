@@ -12,7 +12,7 @@ graph TB
   end
 
   subgraph Docker Network: app-net
-    GW["api-gateway\n:3000\n(JWT validation + routing)"]
+    GW["api-gateway\n:8080\n(JWT validation + routing)"]
 
     subgraph Services
       US["user-service\n:3001\n(auth, users)"]
@@ -25,7 +25,7 @@ graph TB
     end
   end
 
-  Client -->|HTTPS :3000| GW
+  Client -->|HTTPS :8080| GW
   GW -->|HTTP — /users /auth| US
   GW -->|HTTP — /tasks| TS
   US -->|SQL| UDB
@@ -41,7 +41,7 @@ sequenceDiagram
   participant TS as task-service :3002
   participant DB as tasks_db
 
-  C->>GW: POST /tasks\nAuthorization: Bearer <JWT>
+  C->>GW: POST /api/tasks\nAuthorization: Bearer <JWT>
   GW->>GW: Validate JWT\nExtract userId, role
   GW->>TS: POST /tasks\nX-User-Id: uuid\nX-User-Role: member
   TS->>DB: INSERT INTO tasks ...
@@ -54,7 +54,7 @@ sequenceDiagram
 
 | Service | Internal port | Host port (dev only) |
 |---|---|---|
-| api-gateway | 3000 | 3000 |
+| api-gateway | 8080 | 8080 |
 | user-service | 3001 | not exposed |
 | task-service | 3002 | not exposed |
 | users_db (PostgreSQL) | 5432 | not exposed |
