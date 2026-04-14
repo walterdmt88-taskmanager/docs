@@ -1,57 +1,154 @@
-# Project Context — [Your Project Name]
+# Task Management System — Agent Context
 
-> Replace every line in this file with your project's details before Day 9.
-> Claude Code reads this file before every implementation task.
+> This file is loaded automatically by Claude Code at the start of every session in this repo.
+> Do not delete or rename it.
 
-## What this system is
+---
 
-**Project name:** Task Management System  
-**Group:** chau_tv + thai_dm  
-**Program day start:** Day 9
+## What We Are Building
 
-A REST API that lets teams create, assign, and track tasks. Teams currently track tasks in chat tools (Slack, Discord) — tasks get buried in messages and there is no way to see who is responsible for what. This system solves that.
+A REST API task tracker — like a stripped-down Jira. Teams create, assign, and track tasks without losing them in Slack/Discord. No frontend. API only.
 
-## Document system
+**Team:** chau_tv (Person A) + thai_dm (Person B)
+**Program:** ProOps2026 — Mock Project, Sprint 1 starts Day 10
+**GitHub org:** https://github.com/proops2026-taskmanager
 
-See `docs/INDEX.md` for the full document map.
+---
 
-| Document | Location | Purpose |
-|---|---|---|
-| DOP-001 | `docs/DOP-001.md` | What we are building and why — read before any feature work |
-| IRD-001 | `docs/IRD-001.md` | user-service spec — API contract, data model, auth rules |
-| IRD-002 | `docs/IRD-002.md` | task-service spec — API contract, data model, status rules |
-| IRD-003 | `docs/IRD-003.md` | Gateway, Docker Compose, NFRs (applies to ALL services) |
-| Architecture | `docs/architecture.md` | System diagram — service layout and connections |
-| Sprint backlog | `docs/sprint-01.md` | Current sprint tasks and assignments |
+## Architecture (locked)
 
-**Rule:** Before implementing any feature, read DOP-001 + the IRD for the service you are working on + IRD-003 (NFRs apply everywhere).
+```
+Client (curl / Postman)
+    │  HTTP :8080
+    ▼
+api-gateway  :8080   JWT validation + request routing
+    ├──────────────→  user-service  :3001   register, login, JWT issuance
+    └──────────────→  task-service  :3002   task CRUD, status, comments
 
-## Services
+Each service has its own PostgreSQL 15 database.
+Network: taskmanager-net (Docker bridge)
+Only api-gateway port 8080 is exposed to the host.
+```
 
-| Service | Port | Responsibility |
-|---|---|---|
-| api-gateway | 3000 | Routes requests to services, handles JWT auth middleware |
-| user-service | 3001 | User registration, login, JWT issuance |
-| task-service | 3002 | Task CRUD, assignment, status transitions |
+---
 
-## Technology stack
+## Document System
 
-- **Language:** Node.js 20 (TypeScript)
-- **Framework:** Express 4
-- **Database:** PostgreSQL 16
-- **Auth:** JWT (jsonwebtoken, bcryptjs)
-- **Container:** Docker + Docker Compose
-- **Testing:** Jest + Supertest
+Read these before implementing anything:
 
-## Rules for Claude Code
+| Document | Local path | Notion | Governs |
+|----------|------------|--------|---------|
+| DOP-001 | `docs/DOP-001.md` | https://www.notion.so/341dde5fafa981fcab12ffb95ef3d115 | What we're building — ACs that define done |
+| IRD-001 | `docs/IRD-001.md` | https://www.notion.so/341dde5fafa981f2906ae06ef131a347 | user-service: API contract, data model, auth rules |
+| IRD-002 | `docs/IRD-002.md` | https://www.notion.so/341dde5fafa98107b9f9de9ecf0dae4d | task-service: API contract, status transitions, comments |
+| IRD-003 | `docs/IRD-003.md` | https://www.notion.so/341dde5fafa981be8ba2e5840eced914 | api-gateway routing, JWT middleware, Docker Compose, NFRs |
+| Architecture | `docs/architecture.md` | — | System diagram + request flow |
+| Sprint 1 | `docs/sprint-01.md` | — | All tasks + assignments for Sprint 1 |
 
-1. Read `docs/DOP-001.md` and `docs/IRD-001.md` before implementing any feature
-2. Every service must have a `/health` endpoint returning `{ status: "ok" }`
-3. No hardcoded secrets — all config via environment variables in `.env`
-4. Every new endpoint must have at least one integration test
-5. Follow the API contract in IRD-001 exactly — do not invent new endpoints
-6. Cross-service references store only the foreign ID — no shared database tables
+**Rule:** Before implementing any feature, read DOP-001 + the IRD for the service + IRD-003 (NFRs apply to every service).
 
-## Current sprint
+---
 
-See `docs/sprint-01.md` for the current sprint backlog and task assignments.
+## Standards — Non-Negotiable
+
+These decisions are locked. Do not invent alternatives.
+
+| Rule | Value |
+|------|-------|
+| Error format | `{ "error": "string" }` — all services, all endpoints |
+| JWT algorithm | HS256, 24h expiry, payload `{ sub: userId, role }` |
+| JWT enforcement | api-gateway only — task-service and user-service never validate JWT |
+| Header injection | api-gateway injects `X-User-Id` + `X-User-Role` after JWT validation |
+| Authorization header | api-gateway strips it before forwarding — never reaches downstream |
+| Cross-service references | Plain UUID only — no foreign keys across service boundaries |
+| Password hashing | bcrypt, salt rounds: 12 |
+| Status transitions | TODO→IN_PROGRESS→DONE (terminal), any→CANCELLED (terminal), no backward |
+| Health endpoint | `GET /health → 200 { "status": "ok" }` — every service |
+| Secrets | `.env` (git-ignored) + `.env.example` (committed, no values) |
+| PostgreSQL version | 15 |
+| Node.js version | 20 LTS |
+
+---
+
+## Team — Task Assignments (Sprint 1)
+
+### chau_tv owns:
+| Task | Description |
+|------|-------------|
+| T-01 | Scaffold user-service (npm init, TS config, Express, /health, Dockerfile, .env.example) |
+| T-03 | POST /users — registration with bcrypt + validation |
+| T-05 | GET /users/:id — internal endpoint |
+| T-06 | user-service integration tests (jest + supertest) |
+| T-08 | POST /tasks — create task |
+| T-09 | GET /tasks — list tasks (role-based: lead sees all, member sees own) |
+| T-15 | api-gateway scaffold + JWT middleware |
+| T-16 | api-gateway routing table |
+| T-19 | Docker Compose full stack |
+
+### thai_dm owns:
+| Task | Description |
+|------|-------------|
+| T-02 | user-service DB schema (users table, migrations) |
+| T-04 | POST /auth/login — verify + JWT issuance |
+| T-07 | Scaffold task-service |
+| T-10 | GET /tasks/:id — task detail + comments |
+| T-11 | PATCH /tasks/:id/status — status transition enforcement |
+| T-12 | DELETE /tasks/:id |
+| T-13 | POST /tasks/:id/comments — add comment |
+| T-14 | task-service integration tests |
+| T-17 | api-gateway error handling + logging |
+| T-18 | api-gateway integration tests |
+
+---
+
+## Sprint 1 State
+
+**Sprint 1 scope:** user-service + task-service CRUD with integration tests
+**Sprint 2 scope:** api-gateway JWT middleware + Docker Compose full stack (Day 12–14)
+
+Current status as of Day 9:
+- DOP-001, IRD-001, IRD-002, IRD-003 — written, pushed to Notion ✅
+- architecture.md, sprint-01.md, project-overview.md — committed ✅
+- user-service, task-service, api-gateway repos — empty, not scaffolded yet
+
+---
+
+## IRD Gaps — Fix Before Implementing
+
+These 3 gaps must be resolved in Notion before Day 10 implementation starts:
+
+1. **IRD-002 (Notion):** Role-based GET /tasks logic — lead sees ALL tasks, member sees only their own. Currently unspecified. Fix: add role-based access rule to IRD-002 in Notion.
+2. **IRD-001 + IRD-002 (Notion):** Test requirements section missing. Fix: add jest + supertest requirement + test list per endpoint to both IRDs.
+3. **IRD-003 (Notion):** `.env.example` pattern not documented. Fix: add .env.example section to IRD-003 in Notion.
+
+---
+
+## Session Startup Routine
+
+When starting a new session to implement something, do this before any code:
+
+```
+1. Read docs/DOP-001.md           → know what AC you're delivering
+2. Read docs/IRD-00X.md           → know the exact API contract + rules
+3. Read docs/IRD-003.md           → apply NFRs (error format, health, .env)
+4. Read docs/sprint-01.md         → confirm which task you're on
+5. Check GitHub repo state        → is the scaffold already there?
+6. Then implement
+```
+
+If you are in a SERVICE repo (user-service, task-service, api-gateway):
+- That repo's CLAUDE.md tells you exactly which tasks are yours and which IRD governs the service.
+- Read the IRD, then implement.
+
+---
+
+## Rules for Implementation
+
+1. Read DOP-001 + relevant IRD + IRD-003 before writing any code
+2. Follow the API contract in the IRD exactly — do not invent endpoints or change field names
+3. Never validate JWT in user-service or task-service — only api-gateway does this
+4. Cross-service references are plain UUIDs only — no joins across service databases
+5. Every endpoint needs at least one integration test (jest + supertest)
+6. Error format is `{ "error": "..." }` — not `message`, not `msg`, not anything else
+7. No hardcoded secrets — `.env` + `.env.example` pattern on every service
+8. Status transitions are enforced in task-service — return 400 on invalid transition
