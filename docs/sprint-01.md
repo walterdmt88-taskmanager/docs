@@ -152,4 +152,4 @@ Deliberately excluded. Do not implement these in Sprint 1:
 - Comments on tasks (AC-05) — Sprint 2
 - Team lead "all tasks" view (AC-07) — Sprint 2
 - Password reset / email verification — Sprint 3+
-- Frontend / UI — not part of this program
+- Frontend / UI — Sprint 2 (see `docs/sprint-02.md` and `docs/IRD-004.md`)

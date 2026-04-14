@@ -7,7 +7,7 @@
 
 ## What We Are Building
 
-A REST API task tracker — like a stripped-down Jira. Teams create, assign, and track tasks without losing them in Slack/Discord. No frontend. API only.
+A task tracker with a REST API backend and a React web UI — like a stripped-down Jira. Teams create, assign, and track tasks without losing them in Slack/Discord. Sprint 1–2 covers the API; Sprint 2 adds the web UI.
 
 **Team:** chau_tv (Person A) + thai_dm (Person B)
 **Program:** ProOps2026 — Mock Project, Sprint 1 starts Day 10
@@ -18,16 +18,16 @@ A REST API task tracker — like a stripped-down Jira. Teams create, assign, and
 ## Architecture (locked)
 
 ```
-Client (curl / Postman)
-    │  HTTP :8080
-    ▼
-api-gateway  :8080   JWT validation + request routing
-    ├──────────────→  user-service  :3001   register, login, JWT issuance
-    └──────────────→  task-service  :3002   task CRUD, status, comments
+Browser
+    ├──HTTP :3000──→  frontend-service  :3000   React SPA (nginx)
+    └──HTTP :8080──→  api-gateway       :8080   JWT validation + routing + CORS
+                          ├──────────────────→  user-service  :3001   register, login, JWT
+                          └──────────────────→  task-service  :3002   task CRUD, status, comments
 
 Each service has its own PostgreSQL 15 database.
-Network: taskmanager-net (Docker bridge)
-Only api-gateway port 8080 is exposed to the host.
+Network: app-net (Docker bridge)
+frontend-service (:3000) and api-gateway (:8080) are exposed to the host.
+All other services and databases are internal only.
 ```
 
 ---
@@ -42,8 +42,10 @@ Read these before implementing anything:
 | IRD-001 | `docs/IRD-001.md` | https://www.notion.so/341dde5fafa981f2906ae06ef131a347 | user-service: API contract, data model, auth rules |
 | IRD-002 | `docs/IRD-002.md` | https://www.notion.so/341dde5fafa98107b9f9de9ecf0dae4d | task-service: API contract, status transitions, comments |
 | IRD-003 | `docs/IRD-003.md` | https://www.notion.so/341dde5fafa981be8ba2e5840eced914 | api-gateway routing, JWT middleware, Docker Compose, NFRs |
+| IRD-004 | `docs/IRD-004.md` | https://www.notion.so/342dde5fafa9812f99bff829422341b9 | frontend-service: React SPA, pages, auth flow, Docker/nginx |
 | Architecture | `docs/architecture.md` | — | System diagram + request flow |
 | Sprint 1 | `docs/sprint-01.md` | — | All tasks + assignments for Sprint 1 |
+| Sprint 2 | `docs/sprint-02.md` | — | Frontend UI tasks + assignments for Sprint 2 |
 
 **Rule:** Before implementing any feature, read DOP-001 + the IRD for the service + IRD-003 (NFRs apply to every service).
 
@@ -67,12 +69,16 @@ These decisions are locked. Do not invent alternatives.
 | Secrets | `.env` (git-ignored) + `.env.example` (committed, no values) |
 | PostgreSQL version | 15 |
 | Node.js version | 20 LTS |
+| Frontend build | Vite 5 + React 18 + TypeScript 5 |
+| Frontend server | nginx alpine — serves compiled static files |
+| CORS | api-gateway enables CORS for `CORS_ORIGIN` env var (default `http://localhost:3000`) |
+| Frontend auth | JWT stored in `localStorage` under key `auth_token` |
 
 ---
 
-## Team — Task Assignments (Sprint 1)
+## Team — Task Assignments
 
-### chau_tv owns:
+### Sprint 1 — chau_tv owns:
 | Task | Description |
 |------|-------------|
 | T-01 | Scaffold user-service (npm init, TS config, Express, /health, Dockerfile, .env.example) |
@@ -85,7 +91,7 @@ These decisions are locked. Do not invent alternatives.
 | T-16 | api-gateway routing table |
 | T-19 | Docker Compose full stack |
 
-### thai_dm owns:
+### Sprint 1 — thai_dm owns:
 | Task | Description |
 |------|-------------|
 | T-02 | user-service DB schema (users table, migrations) |
@@ -99,17 +105,36 @@ These decisions are locked. Do not invent alternatives.
 | T-17 | api-gateway error handling + logging |
 | T-18 | api-gateway integration tests |
 
+### Sprint 2 — chau_tv owns:
+| Task | Description |
+|------|-------------|
+| F-01 | Scaffold frontend-service (Vite + React + TS, Dockerfile, nginx.conf, .env.example) |
+| F-03 | `TaskListPage` + `TaskCard` + `TaskFilterBar` |
+| F-04 | `CreateTaskPage` + `CreateTaskForm` with client-side validation |
+| F-09 | Frontend component tests (Vitest + React Testing Library) |
+
+### Sprint 2 — thai_dm owns:
+| Task | Description |
+|------|-------------|
+| F-02 | `LoginPage` + Axios interceptor + `AuthGuard` + `localStorage` helpers |
+| F-05 | `TaskDetailPage` — renders task + comments |
+| F-06 | `StatusSelector` component — `PATCH /tasks/:id/status` |
+| F-07 | `CommentForm` + `CommentList` — `POST /tasks/:id/comments` |
+| F-08 | docker-compose.yml frontend addition + CORS middleware on api-gateway |
+
 ---
 
-## Sprint 1 State
+## Sprint State
 
-**Sprint 1 scope:** user-service + task-service CRUD with integration tests
-**Sprint 2 scope:** api-gateway JWT middleware + Docker Compose full stack (Day 12–14)
+**Sprint 1 scope (Day 9–11):** user-service + task-service CRUD + api-gateway + Docker Compose
+**Sprint 2 scope (Day 12–14):** frontend-service React SPA (web UI)
 
-Current status as of Day 9:
+Current status as of Day 10:
 - DOP-001, IRD-001, IRD-002, IRD-003 — written, pushed to Notion ✅
-- architecture.md, sprint-01.md, project-overview.md — committed ✅
+- IRD-004 — written locally (docs/IRD-004.md), pushed to Notion ✅
+- architecture.md, sprint-01.md, sprint-02.md, project-overview.md — committed ✅
 - user-service, task-service, api-gateway repos — empty, not scaffolded yet
+- frontend-service repo — not scaffolded yet (Sprint 2)
 
 ---
 
@@ -131,7 +156,7 @@ When starting a new session to implement something, do this before any code:
 1. Read docs/DOP-001.md           → know what AC you're delivering
 2. Read docs/IRD-00X.md           → know the exact API contract + rules
 3. Read docs/IRD-003.md           → apply NFRs (error format, health, .env)
-4. Read docs/sprint-01.md         → confirm which task you're on
+4. Read docs/sprint-01.md or docs/sprint-02.md → confirm which task you're on
 5. Check GitHub repo state        → is the scaffold already there?
 6. Then implement
 ```
