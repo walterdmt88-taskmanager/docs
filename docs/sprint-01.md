@@ -23,7 +23,7 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 **so that** I have an account and can access the system.
 
 **Acceptance criteria (from DOP AC-01):**
-- `POST /users` with valid email + password → 201 with `{ id, email, created_at }`
+- `POST /users` with valid email + password → 201 with `{ id, email, full_name, role, created_at }`
 - Duplicate email → 409 `{ "error": "Email already in use" }`
 - Missing field → 400 `{ "error": "<specific message>" }`
 
@@ -44,7 +44,7 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 **Acceptance criteria (from DOP AC-02):**
 - `POST /auth/login` with correct credentials → 200 with `{ token, user }`
 - Wrong password → 401 `{ "error": "Invalid credentials" }`
-- JWT payload includes `userId` and `role`, expires in 24h
+- JWT payload includes `sub` and `role`, expires in 24h
 
 | # | Task | Owner | Est. |
 |---|---|---|---|
@@ -65,7 +65,7 @@ Covers AC-03, AC-04, AC-06 from DOP-001. All task data lives here.
 **so that** the team can see and track it.
 
 **Acceptance criteria (from DOP AC-03):**
-- `POST /tasks` with title + assignee_id → 201 with full task object, status `todo`
+- `POST /tasks` with title + assignee_id → 201 with full task object, status `TODO`
 - Missing title or assignee_id → 400
 
 | # | Task | Owner | Est. |
