@@ -145,6 +145,41 @@ Sprint 1 is complete when all of the following are true:
 
 ---
 
+## Sprint 1 — Integration Protocol
+
+Services are built in parallel. Integration is phased and gated.
+
+### Phase 1 — Service-level (Epic 1 + Epic 2, parallel)
+
+| Service | Gate to push `main` |
+|---|---|
+| user-service | All T-01 → T-06 tasks done; `npm test` passes |
+| task-service | All T-07 → T-14 tasks done; `npm test` passes |
+
+Each service agent works independently. No waiting for the other service.
+
+**task-service identity rule:** In integration tests, inject `X-User-Id` and `X-User-Role` headers directly in each test request. Do NOT call user-service or validate a JWT. That is the gateway's job.
+
+### Phase 2 — Gateway integration (Epic 3, sequential)
+
+The api-gateway work (T-15 → T-19) begins only after **both** user-service and task-service show ✅ below.
+
+| Service | Status | Merged to main |
+|---|---|---|
+| user-service | ⬜ | — |
+| task-service | ⬜ | — |
+| api-gateway | ⬜ (waits for both above) | — |
+
+Update this table when each service is integration-ready.
+
+### If a dependent service is not ready
+
+- Your own service work continues unblocked
+- If another service has a bug that breaks e2e: open a Linear issue in that service's repo; do not patch it from your session
+- Gateway agent holds T-19 (e2e test) until both service rows above show ✅
+
+---
+
 ## Sprint 1 — Out of scope
 
 Deliberately excluded. Do not implement these in Sprint 1:
