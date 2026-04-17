@@ -27,10 +27,10 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - On 401, shows an inline error message
 - Unauthenticated access to any protected route redirects to `/login`
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-01 | Scaffold frontend-service: Vite + React 18 + TS, Dockerfile, nginx.conf, .env.example | A | 2h |
-| F-02 | `LoginPage` + `LoginForm` + Axios interceptor + `AuthGuard` HOC + `localStorage` helpers | B | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-01 | Scaffold frontend-service: Vite + React 18 + TS, Dockerfile, nginx.conf, .env.example | A | 2h | [PRO-27](https://linear.app/chautv-proops2026-claude/issue/PRO-27/f-01-scaffold-frontend-service) |
+| F-02 | `LoginPage` + `LoginForm` + Axios interceptor + `AuthGuard` HOC + `localStorage` helpers | B | 3h | [PRO-28](https://linear.app/chautv-proops2026-claude/issue/PRO-28/f-02-loginpage-authguard-axios-interceptor) |
 
 ---
 
@@ -44,9 +44,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Member sees own tasks; team lead sees all tasks
 - Empty state shows "No tasks yet"
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-03 | `TaskListPage` + `TaskCard` + `TaskFilterBar` (status + assignee_id filters) | A | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-03 | `TaskListPage` + `TaskCard` + `TaskFilterBar` (status + assignee_id filters) | A | 3h | [PRO-29](https://linear.app/chautv-proops2026-claude/issue/PRO-29/f-03-tasklistpage-taskcard-taskfilterbar) |
 
 ---
 
@@ -60,9 +60,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Submit calls `POST /tasks`; on 201, redirects to `/` and new task appears at top
 - Missing required field → form-level validation error, no API call made
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-04 | `CreateTaskPage` + `CreateTaskForm` with client-side validation | A | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-04 | `CreateTaskPage` + `CreateTaskForm` with client-side validation | A | 2h | [PRO-30](https://linear.app/chautv-proops2026-claude/issue/PRO-30/f-04-createtaskpage-createtaskform) |
 
 ---
 
@@ -76,10 +76,10 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Selecting a new valid status calls `PATCH /tasks/:id/status`; UI updates on success
 - On 400 (invalid transition), shows an inline error
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-05 | `TaskDetailPage` — `GET /tasks/:id`, renders task fields + `CommentList` | B | 2h |
-| F-06 | `StatusSelector` component — `PATCH /tasks/:id/status`, inline error on 400 | B | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-05 | `TaskDetailPage` — `GET /tasks/:id`, renders task fields + `CommentList` | B | 2h | [PRO-31](https://linear.app/chautv-proops2026-claude/issue/PRO-31/f-05-taskdetailpage-task-fields-comments-display) |
+| F-06 | `StatusSelector` component — `PATCH /tasks/:id/status`, inline error on 400 | B | 2h | [PRO-32](https://linear.app/chautv-proops2026-claude/issue/PRO-32/f-06-statusselector-patch-tasksidstatus) |
 
 ---
 
@@ -93,9 +93,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Submit calls `POST /tasks/:id/comments`; new comment appears in the list immediately
 - Empty body → disabled submit button
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-07 | `CommentForm` + `CommentList` — `POST /tasks/:id/comments`, optimistic or refetch on success | B | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-07 | `CommentForm` + `CommentList` — `POST /tasks/:id/comments`, optimistic or refetch on success | B | 2h | [PRO-33](https://linear.app/chautv-proops2026-claude/issue/PRO-33/f-07-commentform-post-tasksidcomments) |
 
 ---
 
@@ -109,9 +109,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Changing a filter re-fetches `GET /tasks?status=&assignee_id=` and updates the list
 - Active filters are reflected in the URL query string
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-03 | (covered — `TaskFilterBar` is part of F-03 above) | A | — |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-03 | (covered — `TaskFilterBar` is part of F-03 above) | A | — | [PRO-29](https://linear.app/chautv-proops2026-claude/issue/PRO-29/f-03-tasklistpage-taskcard-taskfilterbar) |
 
 ---
 
@@ -120,10 +120,10 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 **I want** the frontend running in Docker Compose alongside the backend,  
 **so that** `docker compose up` starts the complete stack including the web UI.
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-08 | Add `frontend-service` to `docker-compose.yml` + CORS middleware to api-gateway (`CORS_ORIGIN` env var) | B | 2h |
-| F-09 | Frontend component tests: `LoginPage`, `AuthGuard`, `TaskListPage`, `CreateTaskForm`, `TaskDetailPage`, `StatusSelector`, `CommentForm` (Vitest + RTL) | A | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-08 | Add `frontend-service` to `docker-compose.yml` + CORS middleware to api-gateway (`CORS_ORIGIN` env var) | B | 2h | [PRO-34](https://linear.app/chautv-proops2026-claude/issue/PRO-34/f-08-docker-compose-frontend-gateway-cors) |
+| F-09 | Frontend component tests: `LoginPage`, `AuthGuard`, `TaskListPage`, `CreateTaskForm`, `TaskDetailPage`, `StatusSelector`, `CommentForm` (Vitest + RTL) | A | 3h | [PRO-35](https://linear.app/chautv-proops2026-claude/issue/PRO-35/f-09-frontend-component-tests-vitest-rtl) |
 
 ---
 
