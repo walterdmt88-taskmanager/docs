@@ -27,12 +27,12 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 - Duplicate email → 409 `{ "error": "Email already in use" }`
 - Missing field → 400 `{ "error": "<specific message>" }`
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-01 | Scaffold user-service: Express app, `/health` endpoint, Dockerfile | A | 2h |
-| T-02 | Write users table migration (SQL file) | B | 1h |
-| T-03 | `POST /users` endpoint + bcrypt password hash | A | 3h |
-| T-04 | Integration test: register success, duplicate email 409, missing field 400 | B | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-01 | Scaffold user-service: Express app, `/health` endpoint, Dockerfile | A | 2h | [PRO-8](https://linear.app/chautv-proops2026-claude/issue/PRO-8/t-01-scaffold-user-service) |
+| T-02 | Write users table migration (SQL file) | B | 1h | [PRO-9](https://linear.app/chautv-proops2026-claude/issue/PRO-9/t-02-users-table-migration) |
+| T-03 | `POST /users` endpoint + bcrypt password hash | A | 3h | [PRO-10](https://linear.app/chautv-proops2026-claude/issue/PRO-10/t-03-post-users-registration) |
+| T-04 | Integration test: register success, duplicate email 409, missing field 400 | B | 2h | [PRO-11](https://linear.app/chautv-proops2026-claude/issue/PRO-11/t-04-integration-tests-post-users) |
 
 ---
 
@@ -46,10 +46,10 @@ Covers AC-01 and AC-02 from DOP-001. All user registration and authentication lo
 - Wrong password → 401 `{ "error": "Invalid credentials" }`
 - JWT payload includes `sub` and `role`, expires in 24h
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-05 | `POST /auth/login` endpoint + JWT signing | A | 3h |
-| T-06 | Integration test: login success, wrong password 401 | B | 1h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-05 | `POST /auth/login` endpoint + JWT signing | A | 3h | [PRO-12](https://linear.app/chautv-proops2026-claude/issue/PRO-12/t-05-post-authlogin-jwt-issuance) |
+| T-06 | Integration test: login success, wrong password 401 | B | 1h | [PRO-13](https://linear.app/chautv-proops2026-claude/issue/PRO-13/t-06-integration-tests-post-authlogin) |
 
 ---
 
@@ -68,12 +68,12 @@ Covers AC-03, AC-04, AC-06 from DOP-001. All task data lives here.
 - `POST /tasks` with title + assignee_id → 201 with full task object, status `TODO`
 - Missing title or assignee_id → 400
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-07 | Scaffold task-service: Express app, `/health` endpoint, Dockerfile | B | 2h |
-| T-08 | Write tasks table migration (SQL file) | A | 1h |
-| T-09 | `POST /tasks` endpoint | B | 2h |
-| T-10 | Integration test: create task success, missing field 400 | A | 1h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-07 | Scaffold task-service: Express app, `/health` endpoint, Dockerfile | B | 2h | [PRO-14](https://linear.app/chautv-proops2026-claude/issue/PRO-14/t-07-scaffold-task-service) |
+| T-08 | Write tasks table migration (SQL file) | A | 1h | [PRO-15](https://linear.app/chautv-proops2026-claude/issue/PRO-15/t-08-tasks-comments-table-migration) |
+| T-09 | `POST /tasks` endpoint | B | 2h | [PRO-16](https://linear.app/chautv-proops2026-claude/issue/PRO-16/t-09-post-tasks-create-task) |
+| T-10 | Integration test: create task success, missing field 400 | A | 1h | [PRO-17](https://linear.app/chautv-proops2026-claude/issue/PRO-17/t-10-integration-tests-post-tasks) |
 
 ---
 
@@ -87,10 +87,10 @@ Covers AC-03, AC-04, AC-06 from DOP-001. All task data lives here.
 - Invalid status value → 400 listing valid values
 - Non-existent task → 404
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-11 | `PATCH /tasks/:id/status` endpoint + status validation | B | 2h |
-| T-12 | Integration test: update success, invalid status 400, 404 | A | 1h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-11 | `PATCH /tasks/:id/status` endpoint + status validation | B | 2h | [PRO-18](https://linear.app/chautv-proops2026-claude/issue/PRO-18/t-11-patch-tasksidstatus-status-transitions) |
+| T-12 | Integration test: update success, invalid status 400, 404 | A | 1h | [PRO-19](https://linear.app/chautv-proops2026-claude/issue/PRO-19/t-12-integration-tests-patch-tasksidstatus) |
 
 ---
 
@@ -104,10 +104,10 @@ Covers AC-03, AC-04, AC-06 from DOP-001. All task data lives here.
 - `GET /tasks?status=TODO` → 200 with array filtered by status
 - Empty result → 200 with `[]`
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-13 | `GET /tasks` endpoint with `?status=` and `?assignee_id=` query filters | B | 2h |
-| T-14 | Integration test: list tasks by assignee_id, list by status, empty result | A | 1h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-13 | `GET /tasks` endpoint with `?status=` and `?assignee_id=` query filters | B | 2h | [PRO-20](https://linear.app/chautv-proops2026-claude/issue/PRO-20/t-13-get-tasks-list-with-filters-role-based) |
+| T-14 | Integration test: list tasks by assignee_id, list by status, empty result | A | 1h | [PRO-21](https://linear.app/chautv-proops2026-claude/issue/PRO-21/t-14-integration-tests-get-tasks) |
 
 ---
 
@@ -122,13 +122,13 @@ Wire up routing and JWT validation so the client only talks to port 3000.
 **I want** all client requests to go through the api-gateway,  
 **so that** services are not directly exposed and JWT is validated in one place.
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| T-15 | Scaffold api-gateway: Express + http-proxy-middleware, Dockerfile | A | 2h |
-| T-16 | JWT validation middleware — attach `X-User-Id` and `X-User-Role` headers | A | 2h |
-| T-17 | Route `/users` and `/auth` → user-service, `/tasks` → task-service | B | 1h |
-| T-18 | Write `docker-compose.yml`: all three services + two databases on `app-net` | B | 2h |
-| T-19 | End-to-end test: register → login → create task → update status via gateway only | A | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| T-15 | Scaffold api-gateway: Express + http-proxy-middleware, Dockerfile | A | 2h | [PRO-22](https://linear.app/chautv-proops2026-claude/issue/PRO-22/t-15-scaffold-api-gateway) |
+| T-16 | JWT validation middleware — attach `X-User-Id` and `X-User-Role` headers | A | 2h | [PRO-23](https://linear.app/chautv-proops2026-claude/issue/PRO-23/t-16-jwt-validation-middleware) |
+| T-17 | Route `/users` and `/auth` → user-service, `/tasks` → task-service | B | 1h | [PRO-24](https://linear.app/chautv-proops2026-claude/issue/PRO-24/t-17-gateway-routing-table) |
+| T-18 | Write `docker-compose.yml`: all three services + two databases on `app-net` | B | 2h | [PRO-25](https://linear.app/chautv-proops2026-claude/issue/PRO-25/t-18-docker-composeyml-full-stack) ✅ |
+| T-19 | End-to-end test: register → login → create task → update status via gateway only | A | 2h | [PRO-26](https://linear.app/chautv-proops2026-claude/issue/PRO-26/t-19-end-to-end-test-via-gateway) |
 
 ---
 
@@ -166,9 +166,9 @@ The api-gateway work (T-15 → T-19) begins only after **both** user-service and
 
 | Service | Status | Merged to main |
 |---|---|---|
-| user-service | ⬜ | — |
-| task-service | ⬜ | — |
-| api-gateway | ⬜ (waits for both above) | — |
+| user-service | ✅ T-01→T-06 done, tests pass | main |
+| task-service | ✅ T-07→T-14 done, tests pass | main |
+| api-gateway | 🟡 T-15→T-18 done, T-19 pending | — |
 
 Update this table when each service is integration-ready.
 
