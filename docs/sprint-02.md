@@ -162,6 +162,33 @@ Sprint 2 is complete when all of the following are true:
 
 ---
 
+---
+
+## Epic 5 · Docker Hardening
+
+Upgrades all Node.js service Dockerfiles from the 2-stage pattern to the 3-stage pattern (deps → builder → runner) acquired in the Docker module. Fixes the `start_period` gap on PostgreSQL healthchecks. Runs in parallel with Epic 4 — no dependencies between them.
+
+**Why now:** Sprint 1 Dockerfiles run correctly but re-download production `node_modules` at build time (`npm ci --omit=dev` in the production stage). The 3-stage pattern pre-builds deps in a dedicated stage and copies the pre-built `node_modules` into the runner — no network call in the final layer, faster CI, deterministic builds. This is now the locked standard in IRD-000 §11.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| D-01 | Upgrade `user-service/Dockerfile` to 3-stage (deps → builder → runner, appuser) | chau_tv | 1h | ✅ Done |
+| D-02 | Upgrade `task-service/Dockerfile` to 3-stage | thai_dm | 1h | ✅ Done |
+| D-03 | Upgrade `api-gateway/Dockerfile` to 3-stage | chau_tv | 1h | ✅ Done |
+| D-04 | Add `start_period: 10s` to `db-user` + `db-task` healthchecks in `docker-compose.yml` | chau_tv | 30m | ✅ Done |
+| D-05 | Update `IRD-000 §11` Dockerfile standard to 3-stage pattern + add frontend exception note | chau_tv | 30m | ✅ Done |
+
+**Estimate:** 4h. **Net Sprint 2 delta:** +4h (no tasks removed).
+
+**Definition of done for this epic:**
+- `docker compose build` completes without error for all 3 services
+- `docker compose up` — all services reach `healthy` state and `GET /health` returns 200
+- IRD-000 §11 in Notion updated (run `/report` to push)
+
+⚠️ **Notion sync needed:** `docs/IRD-000.md` was updated — run `/report` to push §11 changes to https://www.notion.so/344dde5fafa981c196b4e57212bc28cf
+
+---
+
 ## Sprint 2 — Out of scope
 
 - Real-time updates (WebSocket / Server-Sent Events)
