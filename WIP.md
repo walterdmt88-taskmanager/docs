@@ -1,8 +1,8 @@
 # Work In Progress — Task Manager Project Dashboard
 
-> **Last updated:** 2026-04-19 (Session 2)
-> **Session:** !system-audit — Spoke ↔ Hub alignment reconciliation
-> **Overall status:** Sprint 1 ✅ Complete · Sprint 2 ✅ Complete · EC2 Deployment ⏳ Pending
+> **Last updated:** 2026-04-19 (Session 3)
+> **Session:** Day 11 Swarm Lab — 3-node cluster deployed + !system-audit reconciliation
+> **Overall status:** Sprint 1 ✅ Complete · Sprint 2 ✅ Complete · EC2 Swarm Deployment ✅ Done
 
 ---
 
@@ -34,19 +34,20 @@
 
 ---
 
-### Sprint 2 — Frontend + Integration (9/9 tasks: ✅ Done)
+### Sprint 2 — Frontend + Integration (10/10 tasks: ✅ Done)
 
 | Task | Description | Owner | Status |
 |------|-------------|-------|--------|
 | F-01 | Scaffold frontend-service (Vite + React + TS) | chau_tv | ✅ |
-| F-02 | LoginPage component + auth flow | thai_dm | ✅ |
+| F-02 | LoginPage + RegisterPage + auth flow | thai_dm | ✅ |
 | F-03 | TaskListPage + TaskCard + TaskFilterBar | chau_tv | ✅ |
-| F-04 | CreateTaskPage + form | chau_tv | ✅ |
+| F-04 | CreateTaskPage + form + assignee dropdown | chau_tv | ✅ |
 | F-05 | GET /api/tasks/:id endpoint (task detail) | thai_dm | ✅ |
 | F-06 | DELETE /api/tasks/:id endpoint | thai_dm | ✅ |
 | F-07 | POST /api/tasks/:id/comments endpoint | thai_dm | ✅ |
 | F-08 | Add frontend-service to docker-compose + CORS wiring | thai_dm | ✅ |
 | F-09 | TaskDetailPage + CommentForm + CommentList | chau_tv | ✅ |
+| F-10 | Containerize frontend for Swarm (buildx --platform linux/amd64, VITE_API_BASE_URL baked) | chau_tv | ✅ |
 
 ---
 
@@ -81,10 +82,33 @@ These endpoints and UI flows are fully built, tested, and Dockerized — ready t
 
 | Artifact | Status | Notes |
 |---------|--------|-------|
-| docker-compose.yml (full stack) | ✅ Ready | all 4 services + 2 PG DBs, health-gated startup chain, VITE_API_BASE_URL baked |
-| docker-compose.prod.yml | ✅ Ready | Pre-built images from chaudevops Docker Hub |
+| docker-compose.yml (full stack) | ✅ Ready | all 5 services + 2 PG DBs, health-gated startup chain |
+| docker-compose.prod.yml | ✅ Ready | Pre-built hub images, restart: unless-stopped |
+| docker-compose.stack.yml | ✅ Ready | 3-node Swarm stack — overlay network, deploy sections, placement constraints |
 | Postman collection | ✅ Ready | `collections/Task-Manager-API.postman_collection.json` |
 | Postman environment | ✅ Ready | `collections/Task-Manager-Local.postman_environment.json` |
+
+### Swarm Cluster (Day 11 Lab — 2026-04-19)
+
+| Node | Instance ID | Private IP | Public IP | Role |
+|------|------------|------------|-----------|------|
+| Manager | i-0d8cbb95c2fc63602 | 172.31.7.79 | 18.159.224.179 | Swarm manager + DBs |
+| Worker 1 | i-0e7c184e1f7d7aac8 | 172.31.44.26 | 63.180.233.122 | Stateless services |
+| Worker 2 | i-0ae39149d4015d64a | 172.31.36.206 | 18.193.130.216 | Stateless services |
+
+**Live URLs (while cluster running):**
+- UI: http://18.159.224.179:3000
+- API: http://18.159.224.179:8080/health
+- Worker-1 UI: http://63.180.233.122:3000 (routing mesh)
+- Worker-2 UI: http://18.193.130.216:3000 (routing mesh)
+
+**⚠️ VITE_API_BASE_URL is baked into the frontend image at build time.**
+If the manager's public IP changes (stop/start), rebuild with:
+```bash
+cd frontend-service && docker buildx build --platform linux/amd64 \
+  --build-arg VITE_API_BASE_URL="http://<NEW_MANAGER_IP>:8080" \
+  -t chaudevops/taskmanager-frontend-service:v1.0.0 --push .
+```
 
 **To run the full backend stack:**
 ```bash
@@ -138,13 +162,25 @@ Fixed the following issues:
 | G-07 | user-service: 2 endpoints untested (GET/:id, GET /users) | Added to gaps |
 | G-02 | Confirmed active in docker-compose.prod.yml | Still open |
 
+### Session 3 — 2026-04-19 (Day 11 Swarm Lab)
+
+| # | Action | Result |
+|---|--------|--------|
+| Infra | Provisioned 3 EC2 t3.micro (1 manager + 2 workers), chautv-swarm-sg | ✅ |
+| Infra | Learned: AWS tag enforcement — Name + Owner + Email required on all resources | ✅ |
+| Swarm | docker swarm init + 2 workers joined | ✅ |
+| Deploy | docker stack deploy — 6/6 services Running (frontend 2/2, api-gw 2/2, user 2/2, task 2/2, db-user 1/1, db-task 1/1) | ✅ |
+| Bug | Frontend built with VITE_API_BASE_URL=localhost → rebuilt with manager IP | ✅ Fixed |
+| Audit | !system-audit revealed docker-compose.stack.yml existed in conversation only | ✅ Written to disk |
+| Audit | F-10 (Swarm frontend packaging) existed in conversation only | ✅ Added to sprint-02.md |
+| Audit | RegisterPage not in sprint docs | ✅ Added to F-02 scope |
+| Audit | Frontend unpushed commit | ✅ Pushed |
+
 ## Next Session Checklist
 
-- [ ] Fix G-02 (🔴 CRITICAL before EC2): Remove `ports:` for user-service + task-service in `docker-compose.prod.yml`
-- [ ] Fix G-06 (🔴 Broken Promise): Add tests for `GET /tasks/:id`, `DELETE /tasks/:id`, `POST /tasks/:id/comments` in task-service
-- [ ] Fix G-07 (🟡 Warning): Add tests for `GET /users/:id` and `GET /users` in user-service
-- [ ] Fix G-03: Create `.env.prod` files for all 4 services with real EC2 values
-- [ ] Commit all uncommitted changes (user-service, api-gateway, frontend-service, docs)
-- [ ] EC2 deploy (single-instance): copy repo to EC2, set SG rules (22, 8080, 3000), `docker compose up --build`
-- [ ] Verify port bindings on EC2: `docker ps --format "table {{.Names}}\t{{.Ports}}"` — ensure 0.0.0.0 not 127.0.0.1
-- [ ] Phase 2: ECR push + Terraform for ECS + RDS + ALB (see PROJECT-MEMORY.md §AWS Deployment Plan)
+- [ ] Verify rebuilt frontend: open http://18.159.224.179:3000 → login → create task
+- [ ] Fix G-02 (🔴): Remove `ports:` for user-service + task-service in `docker-compose.prod.yml`
+- [ ] Fix G-06 (🔴 Broken Promise): Add tests for `GET /tasks/:id`, `DELETE /tasks/:id`, `POST /tasks/:id/comments`
+- [ ] Fix G-07 (🟡): Add tests for `GET /users/:id` + `GET /users` in user-service
+- [ ] Stop (not terminate) EC2 instances when done testing — public IP changes on next start
+- [ ] Day 12: Kubernetes fundamentals (memory/orchestration.md has the Compose/Swarm/K8s context)

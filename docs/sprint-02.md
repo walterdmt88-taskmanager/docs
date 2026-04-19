@@ -127,6 +127,22 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 
 ---
 
+### User Story FE-08
+**As a** DevOps engineer,  
+**I want** the frontend containerized for multi-node Swarm deployment,  
+**so that** the full stack (including UI) can be deployed across a 3-node EC2 cluster.
+
+**Context:** Added 2026-04-19 after `!system-audit` identified that the Swarm architecture
+(designed in Day 11 lab) included `frontend-service` but no sprint task existed for it.
+`RegisterPage` was also added organically during Session 1 — included here.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| F-10 | Build frontend image for linux/amd64 with `VITE_API_BASE_URL` baked; push to `chaudevops/taskmanager-frontend-service:v1.0.0`; add to `docker-compose.stack.yml` | chau_tv | 1.5h | ✅ Done (2026-04-19) |
+| F-11 | RegisterPage — registration form wired to `POST /api/users`; redirect to `/login` on success | chau_tv | 1h | ✅ Done (2026-04-19, organic addition to F-02 scope) |
+
+---
+
 ## Sprint 2 — Task Assignment Summary
 
 ### chau_tv (A) owns:
