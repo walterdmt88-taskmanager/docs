@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-user           # K8s DNS: db-user:5432 — used in user-svc-secret DATABASE_URL
+  namespace: default
+spec:
+  clusterIP: None         # Headless — required for StatefulSet stable DNS
+  selector:
+    app: db-user
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-user
+  namespace: default
+spec:
+  serviceName: db-user
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-user
+  template:
+    metadata:
+      labels:
+        app: db-user
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: db-user-cm        # POSTGRES_DB, POSTGRES_USER
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-secret  # Created via kubectl create secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: db-user-data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "app_user", "-d", "users_db"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: db-user-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -205,6 +205,28 @@ Upgrades all Node.js service Dockerfiles from the 2-stage pattern to the 3-stage
 
 ---
 
+## Epic 6 · Redis Rate Limiting (scope-pivot — 2026-04-23)
+
+Added via `!scope-pivot` — Day 15 Helm lab installs Redis as a real project dependency.
+Implements DOP-001 AC-14 and IRD-003 Rate Limiting section.
+
+**Depends on:** Day 15 Helm lab (`helm install my-redis bitnami/redis`) must complete first — R-01 cannot be wired until the Redis K8s Service exists.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| R-01 | Wire `express-rate-limit` + `rate-limit-redis` into api-gateway on `POST /auth/login`. REDIS_URL from ConfigMap (`redis://my-redis-master:6379`). Returns 429 after >10 req/min per IP. | chau_tv | 2h | Estimated |
+| R-02 | Integration test: 11 rapid POST /auth/login requests → last returns 429 `{ "error": "Too many requests, retry after 60s" }`. | chau_tv | 1h | Estimated |
+
+**Definition of done:**
+- `helm list` shows my-redis as `deployed`
+- `kubectl exec [api-gw-pod] -- env | grep REDIS_URL` shows `redis://my-redis-master:6379`
+- 11th login attempt within 60s returns 429
+- Integration test R-02 passes
+
+⚠️ **Notion sync needed:** run `/report` to push DOP-001 + IRD-000 + IRD-003 + sprint-02.md to Notion after implementation.
+
+---
+
 ## Sprint 2 — Out of scope
 
 - Real-time updates (WebSocket / Server-Sent Events)
