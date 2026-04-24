@@ -168,7 +168,7 @@ The api-gateway work (T-15 → T-19) begins only after **both** user-service and
 |---|---|---|
 | user-service | ✅ T-01→T-06 done, tests pass | main |
 | task-service | ✅ T-07→T-14 done, tests pass | main |
-| api-gateway | 🟡 T-15→T-18 done, T-19 pending | — |
+| api-gateway | ✅ T-15→T-19 done, e2e pass | main |
 
 Update this table when each service is integration-ready.
 

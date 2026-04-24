@@ -16,8 +16,45 @@ All services hot-reload. Databases start with migrations auto-applied via initdb
 
 Uses pre-built hub images. No build on server. `.env` files delivered via `scp`.
 
+### Pre-Deploy Checklist
+
 ```bash
-# From local machine
+# 1. Generate a shared JWT_SECRET (same value used in BOTH user-service and api-gateway)
+openssl rand -hex 32   # copy output — use it in steps 2 + 3
+
+# 2. Prepare user-service .env
+cp user-service/.env.prod.example user-service/.env
+# Edit user-service/.env:
+#   DATABASE_URL  → replace CHANGE_ME_DB_PASSWORD with a real password
+#   JWT_SECRET    → paste the output from step 1
+
+# 3. Prepare task-service .env
+cp task-service/.env.prod.example task-service/.env
+# Edit task-service/.env:
+#   DATABASE_URL  → replace CHANGE_ME_DB_PASSWORD with a real password
+
+# 4. Prepare api-gateway .env
+cp api-gateway/.env.prod.example api-gateway/.env
+# Edit api-gateway/.env:
+#   JWT_SECRET    → paste the SAME output from step 1
+#   CORS_ORIGIN   → replace CHANGE_ME_EC2_PUBLIC_IP with the actual EC2 IP
+
+# 5. Verify docker-compose.prod.yml — internal services must NOT have ports: block
+#    user-service and task-service should have NO ports: → only app-net access
+#    api-gateway: 8080:8080 ✅   frontend-service: 3000:80 ✅
+
+# 6. Build frontend image with EC2 IP baked in (only if IP changed since last build)
+cd frontend-service
+docker buildx build --platform linux/amd64 \
+  --build-arg VITE_API_BASE_URL="http://<EC2_PUBLIC_IP>:8080" \
+  -t chaudevops/taskmanager-frontend-service:v1.0.0 --push .
+cd ..
+```
+
+### Deploy
+
+```bash
+# From local machine — copy .env files to EC2
 scp -i ~/.ssh/chautv-public-ec2-kp.pem \
   api-gateway/.env user-service/.env task-service/.env \
   ec2-user@<EC2_IP>:~/taskmanager/
@@ -26,10 +63,16 @@ scp -i ~/.ssh/chautv-public-ec2-kp.pem \
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-**Security Group minimum:** SSH (22 from my IP), 8080 (API), 3000 (UI).
+**Security Group minimum:** SSH (22 from my IP), 8080 (API), 3000 (UI). Block 3001, 3002, 5432.
 
 **Port binding rule:** Verify `docker ps` shows `0.0.0.0:PORT` not `127.0.0.1:PORT`.
 If `127.0.0.1` appears, external traffic is silently dropped even with SG open.
+
+```bash
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+# MUST see:  0.0.0.0:8080->8080/tcp  and  0.0.0.0:3000->80/tcp
+# user-service and task-service must show no host binding at all
+```
 
 ---
 
