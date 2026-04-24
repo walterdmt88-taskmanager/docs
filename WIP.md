@@ -94,20 +94,15 @@ HEALTH:
 
 ---
 
-## Uncommitted Changes (as of 2026-04-24)
+## Git State (as of 2026-04-24 — end of Session 3)
 
-| Location | What changed |
-|----------|-------------|
-| `docker-compose.prod.yml` | G-02 fix: removed ports 3001/3002 |
-| `task-service/src/routes/tasks.ts` | Added GET /:id, DELETE /:id, POST /:id/comments |
-| `task-service/src/__tests__/tasks.test.ts` | Added 17 new tests for 3 endpoints |
-| `user-service/src/routes/users.ts` | Added GET /:id |
-| `user-service/src/__tests__/users.test.ts` | Added 5 new tests for GET /:id + GET /users |
-| `user-service/.env.prod.example` | New file |
-| `task-service/.env.prod.example` | New file |
-| `api-gateway/.env.prod.example` | New file |
-| `docs/docs/DEPLOYMENT.md` | Added pre-deploy checklist for single-node EC2 |
-| `docs/docs/sprint-01.md` | Integration Protocol: api-gateway marked ✅ |
-| `docs/WIP.md` | This file — created |
+| Repo | Status | Last commit |
+|------|--------|-------------|
+| user-service | ✅ Clean | feat: implement GET /users/:id + tests (G-07) |
+| task-service | ✅ Clean | feat: implement GET /tasks/:id, DELETE, POST comments + tests (G-06) |
+| api-gateway | ✅ Clean | chore: add .env.prod.example for EC2 deploy prep |
+| frontend-service | ✅ Clean | feat: Sprint 2 frontend — task detail, comments, register, filter bar, styles |
+| docs | ✅ Clean | docs: WIP.md, EC2 pre-deploy checklist, sprint-01 integration complete |
 
-All changes are local. Not committed to git yet — run `/report` to commit + push.
+⚠️  `docker-compose.prod.yml` (G-02 fix) lives at workspace root — NOT a git repo.
+    Change is saved to disk. Track manually or initialise a root-level repo if needed.
