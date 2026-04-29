@@ -1,0 +1,23 @@
+# Helm values override for bitnami/redis — EKS edition
+# Release name: my-redis
+# Installed Service: my-redis-master:6379
+# Used by: api-gateway rate-limit middleware
+
+architecture: standalone   # single master, no replicas — 1-node lab
+
+auth:
+  enabled: false           # dev lab only
+
+master:
+  persistence:
+    enabled: true
+    storageClass: gp2      # EBS CSI driver provisions gp2 EBS volume
+    size: 8Gi
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
