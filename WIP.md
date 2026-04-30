@@ -117,7 +117,7 @@ HEALTH:
 - [ ] Fix G-09: add `podAntiAffinity` to all 4 Deployment manifests in `eks/manifests/`
 - [ ] Fix G-10: reset `CORS_ORIGIN` on EKS api-gateway from `*` to ELB hostname (`kubectl set env deployment/api-gateway CORS_ORIGIN=<elb-hostname>`)
 - [ ] Postman collection: update with GET /tasks/:id, DELETE /tasks/:id, POST /:id/comments
-- [ ] Commit api-gateway/src/app.ts (CORS fix) and docs changes
+- [x] Commit api-gateway/src/app.ts (CORS fix) and docs changes (2026-04-30)
 - [ ] Push IRD-000.md and IRD-003.md changes to Notion (CORS + E2E timeout rules)
 - [ ] Consider ECS/RDS/ALB for production hardening (Phase 2 infra)
 
@@ -129,9 +129,9 @@ HEALTH:
 |------|--------|-------|
 | user-service | ✅ Clean | All previous uncommitted files committed |
 | task-service | ✅ Clean | All previous uncommitted files committed |
-| api-gateway | ⚠️ 1 uncommitted file | `src/app.ts` — CORS Allow-Headers fix (G-08, api-gateway:v2) |
+| api-gateway | ✅ Clean | `src/app.ts` CORS fix committed (587afb8) |
 | frontend-service | ✅ Clean | All previous uncommitted files committed |
-| docs | ⚠️ 3 uncommitted files | `WIP.md`, `docs/IRD-000.md`, `docs/IRD-003.md` — Session 5 updates |
+| docs | ✅ Clean | WIP.md + IRD-000 + IRD-003 committed (93fa851) |
 | eks/manifests/ | ✅ On disk (workspace root — not a git repo) | ingress.yaml split, all Deployment manifests |
 | eks/regression-test.sh | ✅ On disk (workspace root — not a git repo) | 11-step curl smoke test |
 | e2e-tests/ | ✅ On disk (workspace root — not a git repo) | complete-workflow.spec.ts timeout fix |
