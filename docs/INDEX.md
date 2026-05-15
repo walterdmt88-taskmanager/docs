@@ -44,8 +44,8 @@ Before implementing anything, Claude reads:
 | IRD-004 | [IRD-004.md](IRD-004.md) | frontend-service — React SPA, nginx, login + dashboard + forms | DOP-001 AC-08 to AC-13 | Active |
 | IRD-005 | [IRD-005.md](IRD-005.md) | Kubernetes manifests — Deployments, StatefulSets, Ingress, NetworkPolicies, Helm Redis | DOP-001, DOP-002 | Active (written 2026-05-15) |
 | IRD-006 | [IRD-006.md](IRD-006.md) | AWS Infrastructure — EC2 Swarm, EKS, ECS Fargate, Terraform basics, IAM | DOP-002 | Active (written 2026-05-15) |
-| IRD-007 | [IRD-007.md](IRD-007.md) | CI/CD Pipeline (stub — fill before Week 5) | DOP-003 | STUB |
-| IRD-008 | [IRD-008.md](IRD-008.md) | Observability — Prometheus, Grafana, structured logs, alerting (stub — fill before Week 7) | DOP-004 | STUB |
+| IRD-007 | [IRD-007.md](IRD-007.md) | K8s Deployment Standards — resource limits, probes, namespace, ConfigMap/Secret rules (cross-cutting) | DOP-003 | Active (written 2026-05-15) |
+| IRD-008 | [IRD-008.md](IRD-008.md) | Helm Chart Conventions — values override file, release name, upgrade/rollback runbook for bitnami/redis (cross-cutting) | DOP-003 | Active (written 2026-05-15) |
 
 > Add a new IRD row when you start a new service or a new technical topic (e.g., CI/CD pipeline, observability, auth deep-dive).
 > Each IRD is small and focused. If an IRD grows past ~150 lines, split it.
