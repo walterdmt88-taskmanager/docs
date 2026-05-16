@@ -27,10 +27,10 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - On 401, shows an inline error message
 - Unauthenticated access to any protected route redirects to `/login`
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-01 | Scaffold frontend-service: Vite + React 18 + TS, Dockerfile, nginx.conf, .env.example | A | 2h |
-| F-02 | `LoginPage` + `LoginForm` + Axios interceptor + `AuthGuard` HOC + `localStorage` helpers | B | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-01 | Scaffold frontend-service: Vite + React 18 + TS, Dockerfile, nginx.conf, .env.example | A | 2h | [PRO-27](https://linear.app/chautv-proops2026-claude/issue/PRO-27/f-01-scaffold-frontend-service) |
+| F-02 | `LoginPage` + `LoginForm` + Axios interceptor + `AuthGuard` HOC + `localStorage` helpers | B | 3h | [PRO-28](https://linear.app/chautv-proops2026-claude/issue/PRO-28/f-02-loginpage-authguard-axios-interceptor) |
 
 ---
 
@@ -44,9 +44,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Member sees own tasks; team lead sees all tasks
 - Empty state shows "No tasks yet"
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-03 | `TaskListPage` + `TaskCard` + `TaskFilterBar` (status + assignee_id filters) | A | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-03 | `TaskListPage` + `TaskCard` + `TaskFilterBar` (status + assignee_id filters) | A | 3h | [PRO-29](https://linear.app/chautv-proops2026-claude/issue/PRO-29/f-03-tasklistpage-taskcard-taskfilterbar) |
 
 ---
 
@@ -60,9 +60,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Submit calls `POST /tasks`; on 201, redirects to `/` and new task appears at top
 - Missing required field → form-level validation error, no API call made
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-04 | `CreateTaskPage` + `CreateTaskForm` with client-side validation | A | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-04 | `CreateTaskPage` + `CreateTaskForm` with client-side validation | A | 2h | [PRO-30](https://linear.app/chautv-proops2026-claude/issue/PRO-30/f-04-createtaskpage-createtaskform) |
 
 ---
 
@@ -76,10 +76,10 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Selecting a new valid status calls `PATCH /tasks/:id/status`; UI updates on success
 - On 400 (invalid transition), shows an inline error
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-05 | `TaskDetailPage` — `GET /tasks/:id`, renders task fields + `CommentList` | B | 2h |
-| F-06 | `StatusSelector` component — `PATCH /tasks/:id/status`, inline error on 400 | B | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-05 | `TaskDetailPage` — `GET /tasks/:id`, renders task fields + `CommentList` | B | 2h | [PRO-31](https://linear.app/chautv-proops2026-claude/issue/PRO-31/f-05-taskdetailpage-task-fields-comments-display) |
+| F-06 | `StatusSelector` component — `PATCH /tasks/:id/status`, inline error on 400 | B | 2h | [PRO-32](https://linear.app/chautv-proops2026-claude/issue/PRO-32/f-06-statusselector-patch-tasksidstatus) |
 
 ---
 
@@ -93,9 +93,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Submit calls `POST /tasks/:id/comments`; new comment appears in the list immediately
 - Empty body → disabled submit button
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-07 | `CommentForm` + `CommentList` — `POST /tasks/:id/comments`, optimistic or refetch on success | B | 2h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-07 | `CommentForm` + `CommentList` — `POST /tasks/:id/comments`, optimistic or refetch on success | B | 2h | [PRO-33](https://linear.app/chautv-proops2026-claude/issue/PRO-33/f-07-commentform-post-tasksidcomments) |
 
 ---
 
@@ -109,9 +109,9 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 - Changing a filter re-fetches `GET /tasks?status=&assignee_id=` and updates the list
 - Active filters are reflected in the URL query string
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-03 | (covered — `TaskFilterBar` is part of F-03 above) | A | — |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-03 | (covered — `TaskFilterBar` is part of F-03 above) | A | — | [PRO-29](https://linear.app/chautv-proops2026-claude/issue/PRO-29/f-03-tasklistpage-taskcard-taskfilterbar) |
 
 ---
 
@@ -120,10 +120,26 @@ Covers AC-08 through AC-13 from DOP-001. All UI logic lives in a single React SP
 **I want** the frontend running in Docker Compose alongside the backend,  
 **so that** `docker compose up` starts the complete stack including the web UI.
 
-| # | Task | Owner | Est. |
-|---|---|---|---|
-| F-08 | Add `frontend-service` to `docker-compose.yml` + CORS middleware to api-gateway (`CORS_ORIGIN` env var) | B | 2h |
-| F-09 | Frontend component tests: `LoginPage`, `AuthGuard`, `TaskListPage`, `CreateTaskForm`, `TaskDetailPage`, `StatusSelector`, `CommentForm` (Vitest + RTL) | A | 3h |
+| # | Task | Owner | Est. | Linear |
+|---|---|---|---|---|
+| F-08 | Add `frontend-service` to `docker-compose.yml` + CORS middleware to api-gateway (`CORS_ORIGIN` env var) | B | 2h | [PRO-34](https://linear.app/chautv-proops2026-claude/issue/PRO-34/f-08-docker-compose-frontend-gateway-cors) |
+| F-09 | Frontend component tests: `LoginPage`, `AuthGuard`, `TaskListPage`, `CreateTaskForm`, `TaskDetailPage`, `StatusSelector`, `CommentForm` (Vitest + RTL) | A | 3h | [PRO-35](https://linear.app/chautv-proops2026-claude/issue/PRO-35/f-09-frontend-component-tests-vitest-rtl) |
+
+---
+
+### User Story FE-08
+**As a** DevOps engineer,  
+**I want** the frontend containerized for multi-node Swarm deployment,  
+**so that** the full stack (including UI) can be deployed across a 3-node EC2 cluster.
+
+**Context:** Added 2026-04-19 after `!system-audit` identified that the Swarm architecture
+(designed in Day 11 lab) included `frontend-service` but no sprint task existed for it.
+`RegisterPage` was also added organically during Session 1 — included here.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| F-10 | Build frontend image for linux/amd64 with `VITE_API_BASE_URL` baked; push to `chaudevops/taskmanager-frontend-service:v1.0.0`; add to `docker-compose.stack.yml` | chau_tv | 1.5h | ✅ Done (2026-04-19) |
+| F-11 | RegisterPage — registration form wired to `POST /api/users`; redirect to `/login` on success | chau_tv | 1h | ✅ Done (2026-04-19, organic addition to F-02 scope) |
 
 ---
 
@@ -159,6 +175,55 @@ Sprint 2 is complete when all of the following are true:
 5. nginx serves `index.html` for all SPA routes (no 404 on browser refresh)
 6. `VITE_API_BASE_URL` comes from the environment — not hardcoded
 7. `docs/sprint-02.md` updated to mark all tasks complete
+
+---
+
+---
+
+## Epic 5 · Docker Hardening
+
+Upgrades all Node.js service Dockerfiles from the 2-stage pattern to the 3-stage pattern (deps → builder → runner) acquired in the Docker module. Fixes the `start_period` gap on PostgreSQL healthchecks. Runs in parallel with Epic 4 — no dependencies between them.
+
+**Why now:** Sprint 1 Dockerfiles run correctly but re-download production `node_modules` at build time (`npm ci --omit=dev` in the production stage). The 3-stage pattern pre-builds deps in a dedicated stage and copies the pre-built `node_modules` into the runner — no network call in the final layer, faster CI, deterministic builds. This is now the locked standard in IRD-000 §11.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| D-01 | Upgrade `user-service/Dockerfile` to 3-stage (deps → builder → runner, appuser) | chau_tv | 1h | ✅ Done |
+| D-02 | Upgrade `task-service/Dockerfile` to 3-stage | thai_dm | 1h | ✅ Done |
+| D-03 | Upgrade `api-gateway/Dockerfile` to 3-stage | chau_tv | 1h | ✅ Done |
+| D-04 | Add `start_period: 10s` to `db-user` + `db-task` healthchecks in `docker-compose.yml` | chau_tv | 30m | ✅ Done |
+| D-05 | Update `IRD-000 §11` Dockerfile standard to 3-stage pattern + add frontend exception note | chau_tv | 30m | ✅ Done |
+
+**Estimate:** 4h. **Net Sprint 2 delta:** +4h (no tasks removed).
+
+**Definition of done for this epic:**
+- `docker compose build` completes without error for all 3 services
+- `docker compose up` — all services reach `healthy` state and `GET /health` returns 200
+- IRD-000 §11 in Notion updated (run `/report` to push)
+
+⚠️ **Notion sync needed:** `docs/IRD-000.md` was updated — run `/report` to push §11 changes to https://www.notion.so/344dde5fafa981c196b4e57212bc28cf
+
+---
+
+## Epic 6 · Redis Rate Limiting (scope-pivot — 2026-04-23)
+
+Added via `!scope-pivot` — Day 15 Helm lab installs Redis as a real project dependency.
+Implements DOP-001 AC-14 and IRD-003 Rate Limiting section.
+
+**Depends on:** Day 15 Helm lab (`helm install my-redis bitnami/redis`) must complete first — R-01 cannot be wired until the Redis K8s Service exists.
+
+| # | Task | Owner | Est. | Status |
+|---|---|---|---|---|
+| R-01 | Wire `express-rate-limit` + `rate-limit-redis` into api-gateway on `POST /auth/login`. REDIS_URL from ConfigMap (`redis://my-redis-master:6379`). Returns 429 after >10 req/min per IP. | chau_tv | 2h | Estimated |
+| R-02 | Integration test: 11 rapid POST /auth/login requests → last returns 429 `{ "error": "Too many requests, retry after 60s" }`. | chau_tv | 1h | Estimated |
+
+**Definition of done:**
+- `helm list` shows my-redis as `deployed`
+- `kubectl exec [api-gw-pod] -- env | grep REDIS_URL` shows `redis://my-redis-master:6379`
+- 11th login attempt within 60s returns 429
+- Integration test R-02 passes
+
+⚠️ **Notion sync needed:** run `/report` to push DOP-001 + IRD-000 + IRD-003 + sprint-02.md to Notion after implementation.
 
 ---
 

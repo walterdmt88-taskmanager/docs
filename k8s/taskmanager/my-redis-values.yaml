@@ -1,0 +1,28 @@
+# Helm values override for bitnami/redis
+# Release name: my-redis
+# Installed Service: my-redis-master:6379
+# Used by: api-gateway rate-limit middleware (DOP-001 AC-14)
+
+auth:
+  enabled: false          # Dev only — no password. In prod: enabled: true + use sealed secret
+
+master:
+  persistence:
+    enabled: false        # Dev only — minikube has no reliable StorageClass for StatefulSets
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+replica:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
