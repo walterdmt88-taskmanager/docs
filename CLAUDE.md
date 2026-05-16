@@ -38,11 +38,11 @@ Read these before implementing anything:
 
 | Document | Local path | Notion | Governs |
 |----------|------------|--------|---------|
-| DOP-001 | `docs/DOP-001.md` | https://www.notion.so/341dde5fafa981fcab12ffb95ef3d115 | What we're building — ACs that define done |
-| IRD-001 | `docs/IRD-001.md` | https://www.notion.so/341dde5fafa981f2906ae06ef131a347 | user-service: API contract, data model, auth rules |
-| IRD-002 | `docs/IRD-002.md` | https://www.notion.so/341dde5fafa98107b9f9de9ecf0dae4d | task-service: API contract, status transitions, comments |
-| IRD-003 | `docs/IRD-003.md` | https://www.notion.so/341dde5fafa981be8ba2e5840eced914 | api-gateway routing, JWT middleware, Docker Compose, NFRs |
-| IRD-004 | `docs/IRD-004.md` | https://www.notion.so/342dde5fafa9812f99bff829422341b9 | frontend-service: React SPA, pages, auth flow, Docker/nginx |
+| DOP-001 | `docs/DOP-001.md` | https://www.notion.so/3478a3d4ee8981c689ebe016e399dab1 | What we're building — ACs that define done |
+| IRD-001 | `docs/IRD-001.md` | https://www.notion.so/3478a3d4ee8981a7887cc7f0293d5981 | user-service: API contract, data model, auth rules |
+| IRD-002 | `docs/IRD-002.md` | https://www.notion.so/3478a3d4ee898160a396f3e9204cfbf8 | task-service: API contract, status transitions, comments |
+| IRD-003 | `docs/IRD-003.md` | https://www.notion.so/3478a3d4ee898192af36dfc8ddae429e | api-gateway routing, JWT middleware, Docker Compose, NFRs |
+| IRD-004 | `docs/IRD-004.md` | https://www.notion.so/3478a3d4ee898108a8fdcedd57c0d5cd | frontend-service: React SPA, pages, auth flow, Docker/nginx |
 | Architecture | `docs/architecture.md` | — | System diagram + request flow |
 | Sprint 1 | `docs/sprint-01.md` | — | All tasks + assignments for Sprint 1 |
 | Sprint 2 | `docs/sprint-02.md` | — | Frontend UI tasks + assignments for Sprint 2 |
